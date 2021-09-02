@@ -20,6 +20,8 @@ import com.examen.escuela.entities.Estudiante;
 import com.examen.escuela.service.EstudianteService;
 import com.examen.escuela.util.EntidadToConverter;
 
+import io.swagger.annotations.ApiOperation;
+
 @RestController
 public class EstudianteController {
 
@@ -29,6 +31,7 @@ public class EstudianteController {
 	@Autowired
 	private EntidadToConverter converter;
 
+	@ApiOperation(value = "Lista todos los estudiantes en la base de datos")
 	@GetMapping(value = "estudiante")
 	public ResponseEntity<List<EstudianteResponse>> listarEstudiantes() {
 		List<Estudiante> listaEstudiantes = estudianteService.listarEstudiantes();
@@ -36,23 +39,27 @@ public class EstudianteController {
 				HttpStatus.OK);
 	}
 
+	@ApiOperation(value = "Retorna un estudiante por id")
 	@GetMapping(value = "estudiante/{id}")
 	public ResponseEntity<EstudianteResponse> estudianteXId(@PathVariable Long id) {
 		Estudiante estudiante = estudianteService.buscarEstudianteXId(id);
 		return new ResponseEntity<EstudianteResponse>(converter.convertirEstudiante(estudiante), HttpStatus.OK);
 	}
 
+	@ApiOperation(value = "Lista a los estudiantes con una edad y un estado determinado")
 	@GetMapping(value = "estudiante/{edad}/{isActivo}")
 	public ResponseEntity<List<EstudianteResponse>> estudianteXEdadXisActivo(@PathVariable Integer edad, @PathVariable Boolean isActivo) {
 		List<Estudiante> estudiantes = estudianteService.estudianteXEdadXActivo(edad, isActivo);
 		return new ResponseEntity<List<EstudianteResponse>>(converter.convertirEstudiante(estudiantes), HttpStatus.OK);
 	}
 
+	@ApiOperation(value = "Inactiva a un estudiante")
 	@DeleteMapping(value = "estudiante/{id}")
 	public ResponseEntity<Boolean> borrarEstudianteXid(@PathVariable Long id) {
 		return new ResponseEntity<Boolean>(estudianteService.eliminarEstudianteXId(id), HttpStatus.OK);
 	}
 
+	@ApiOperation(value = "Modifica la edad y el correo de un estudiante buscado por id")
 	@PutMapping(value = "estudiante/{id}")
 	public ResponseEntity<EstudianteResponse> actualizarEstudiante(@PathVariable Long id,
 			@RequestBody EstudianteActuRequest estudianteRequest) {
@@ -60,6 +67,7 @@ public class EstudianteController {
 		return new ResponseEntity<EstudianteResponse>(converter.convertirEstudiante(estudiante), HttpStatus.OK);
 	}
 
+	@ApiOperation(value = "Crea a un estudiante, y a sus respectivos acudientes")
 	@PostMapping(value = "estudiante")
 	public ResponseEntity<EstudianteResponse> crearEstudiante(@RequestBody EstudianteRequest estudianteRequest) {
 		Estudiante estudiante = estudianteService.crearEstudiante(estudianteRequest);
