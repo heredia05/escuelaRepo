@@ -39,6 +39,10 @@ public class EstudianteService {
 		estudiante.setCorreo(estudianteActualizar.getCorreo());
 		return estudianteRepository.save(estudiante);
 	}
+	
+	public List<Estudiante> estudianteXEdadXActivo(Integer edad, Boolean isActivo) {
+		return estudianteRepository.findByEdadAndIsActivo(edad, isActivo);
+	}
 
 	public Estudiante crearEstudiante(EstudianteRequest estudianteCrear) {
 		if (estudianteCrear.getEdad() >= 18) {

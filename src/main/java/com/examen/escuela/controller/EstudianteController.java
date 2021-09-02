@@ -25,14 +25,15 @@ public class EstudianteController {
 
 	@Autowired
 	private EstudianteService estudianteService;
-	
+
 	@Autowired
 	private EntidadToConverter converter;
 
 	@GetMapping(value = "estudiante")
 	public ResponseEntity<List<EstudianteResponse>> listarEstudiantes() {
 		List<Estudiante> listaEstudiantes = estudianteService.listarEstudiantes();
-		return new ResponseEntity<List<EstudianteResponse>>(converter.convertirEstudiante(listaEstudiantes), HttpStatus.OK);
+		return new ResponseEntity<List<EstudianteResponse>>(converter.convertirEstudiante(listaEstudiantes),
+				HttpStatus.OK);
 	}
 
 	@GetMapping(value = "estudiante/{id}")
@@ -41,23 +42,30 @@ public class EstudianteController {
 		return new ResponseEntity<EstudianteResponse>(converter.convertirEstudiante(estudiante), HttpStatus.OK);
 	}
 
-	
-	@DeleteMapping(value= "estudiante/{id}")
+	@GetMapping(value = "estudiante/{edad}/{isActivo}")
+	public ResponseEntity<List<EstudianteResponse>> estudianteXEdadXisActivo(@PathVariable Integer edad, @PathVariable Boolean isActivo) {
+		List<Estudiante> estudiantes = estudianteService.estudianteXEdadXActivo(edad, isActivo);
+		return new ResponseEntity<List<EstudianteResponse>>(converter.convertirEstudiante(estudiantes), HttpStatus.OK);
+	}
+
+	@DeleteMapping(value = "estudiante/{id}")
 	public ResponseEntity<Boolean> borrarEstudianteXid(@PathVariable Long id) {
-		return new ResponseEntity<Boolean>(estudianteService.eliminarEstudianteXId(id),HttpStatus.OK);
+		return new ResponseEntity<Boolean>(estudianteService.eliminarEstudianteXId(id), HttpStatus.OK);
 	}
-	
-	@PutMapping(value= "estudiante/{id}")
-	public ResponseEntity<EstudianteResponse> actualizarEstudiante(@PathVariable Long id, @RequestBody EstudianteActuRequest estudianteRequest){
+
+	@PutMapping(value = "estudiante/{id}")
+	public ResponseEntity<EstudianteResponse> actualizarEstudiante(@PathVariable Long id,
+			@RequestBody EstudianteActuRequest estudianteRequest) {
 		Estudiante estudiante = estudianteService.actualizarEstudiante(estudianteRequest, id);
-		return new ResponseEntity<EstudianteResponse>(converter.convertirEstudiante(estudiante),HttpStatus.OK);
+		return new ResponseEntity<EstudianteResponse>(converter.convertirEstudiante(estudiante), HttpStatus.OK);
 	}
-	
+
 	@PostMapping(value = "estudiante")
-	public ResponseEntity<EstudianteResponse> crearEstudiante (@RequestBody EstudianteRequest estudianteRequest){
+	public ResponseEntity<EstudianteResponse> crearEstudiante(@RequestBody EstudianteRequest estudianteRequest) {
 		Estudiante estudiante = estudianteService.crearEstudiante(estudianteRequest);
-		if(estudiante == null) {
-			return new ResponseEntity<EstudianteResponse>(converter.convertirEstudiante(estudiante), HttpStatus.BAD_REQUEST);
+		if (estudiante == null) {
+			return new ResponseEntity<EstudianteResponse>(converter.convertirEstudiante(estudiante),
+					HttpStatus.BAD_REQUEST);
 		}
 		return new ResponseEntity<EstudianteResponse>(converter.convertirEstudiante(estudiante), HttpStatus.CREATED);
 	}
