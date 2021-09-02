@@ -9,5 +9,4 @@ import com.examen.escuela.entities.Estudiante;
 public interface EstudianteRepository extends JpaRepository<Estudiante, Long> {
 
 	public List<Estudiante> findByEdadAndIsActivo(Integer edad, Boolean isActivo);
-	//public List<Estudiante> findByIsActivo(Boolean isActivo);
 }
