@@ -15,6 +15,8 @@ import com.examen.escuela.repository.EstudianteRepository;
 @Service
 public class EstudianteService {
 
+	private static final int edadMinima = 18;
+
 	@Autowired
 	private EstudianteRepository estudianteRepository;
 
@@ -39,13 +41,13 @@ public class EstudianteService {
 		estudiante.setCorreo(estudianteActualizar.getCorreo());
 		return estudianteRepository.save(estudiante);
 	}
-	
+
 	public List<Estudiante> estudianteXEdadXActivo(Integer edad, Boolean isActivo) {
 		return estudianteRepository.findByEdadAndIsActivo(edad, isActivo);
 	}
 
 	public Estudiante crearEstudiante(EstudianteRequest estudianteCrear) {
-		if (estudianteCrear.getEdad() < 18) {
+		if (estudianteCrear.getEdad() < edadMinima) {
 			Estudiante estudiante = new Estudiante();
 			estudiante.setEdad(estudianteCrear.getEdad());
 			estudiante.setNombre(estudianteCrear.getNombre());
@@ -59,7 +61,7 @@ public class EstudianteService {
 					.collect(Collectors.toList());
 			estudiante.setAcudientes(acudientes);
 			return estudianteRepository.save(estudiante);
-		}else {
+		} else {
 			return null;
 		}
 	}
