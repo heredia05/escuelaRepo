@@ -45,7 +45,7 @@ public class EstudianteService {
 	}
 
 	public Estudiante crearEstudiante(EstudianteRequest estudianteCrear) {
-		if (estudianteCrear.getEdad() >= 18) {
+		if (estudianteCrear.getEdad() < 18) {
 			Estudiante estudiante = new Estudiante();
 			estudiante.setEdad(estudianteCrear.getEdad());
 			estudiante.setNombre(estudianteCrear.getNombre());
